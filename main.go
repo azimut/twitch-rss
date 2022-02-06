@@ -37,11 +37,12 @@ func login() (*helix.Client, error) {
 
 func toItem(stream helix.Stream) *feeds.Item {
 	item := &feeds.Item{}
-	item.Title = fmt.Sprintf("(%s|%s|%d) %s", strings.ToUpper(stream.Language), stream.UserLogin, stream.ViewerCount, stream.Title)
+	item.Title = stream.Title
 	item.Created = stream.StartedAt
 	item.Author = &feeds.Author{Name: stream.UserName}
 	item.Link = &feeds.Link{Href: "https://www.twitch.tv/" + stream.UserLogin}
-	item.Description = fmt.Sprintf("<a href='https://www.twitch.tv/popout/%s/chat?popout='>%s Chat</a>", stream.UserLogin, stream.UserName)
+	item.Description = fmt.Sprintf("<a href='https://www.twitch.tv/popout/%s/chat?popout='>%s Chat</a><br/>", stream.UserLogin, stream.UserName)
+	item.Description += fmt.Sprintf("(%s|%d)", strings.ToUpper(stream.Language), stream.ViewerCount)
 	return item
 }
 
