@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -12,9 +13,10 @@ import (
 )
 
 var (
-	categoryName = "Software and Game Development"
+	categoryName string
 	clientID     string
 	clientSecret string
+	nResults     uint
 )
 
 func login() (*helix.Client, error) {
@@ -39,6 +41,7 @@ func toItem(stream helix.Stream) *feeds.Item {
 	item.Created = stream.StartedAt
 	item.Author = &feeds.Author{Name: stream.UserName}
 	item.Link = &feeds.Link{Href: "https://www.twitch.tv/" + stream.UserLogin}
+	item.Description = fmt.Sprintf("<a href='https://www.twitch.tv/popout/%s/chat?popout='>%s Chat</a>", stream.UserLogin, stream.UserName)
 	return item
 }
 
@@ -68,11 +71,22 @@ func toFeed(streams []helix.Stream) (string, error) {
 	return atom, nil
 }
 
-func main() {
+func init() {
+	flag.UintVar(&nResults, "n", 10, "number of results to return")
 	if err := readConfig(); err != nil {
 		log.Fatal("could not read credentials from twitch-rss.secret")
 		os.Exit(1)
 	}
+}
+
+func main() {
+	flag.Parse()
+	if len(os.Args) != 2 {
+		log.Fatal("missing category argument")
+		os.Exit(1)
+	}
+	categoryName = os.Args[1]
+
 	client, err := login()
 	if err != nil {
 		log.Fatal(err)
@@ -87,7 +101,7 @@ func main() {
 	}
 	gameID := games.Data.Games[0].ID
 	streams, err := client.GetStreams(&helix.StreamsParams{
-		First:    10,
+		First:    int(nResults),
 		Type:     "live",
 		Language: []string{"en", "es"},
 		GameIDs:  []string{gameID},
