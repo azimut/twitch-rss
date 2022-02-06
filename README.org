@@ -1,0 +1,19 @@
+* twitch-rss
+
+returns a RSS feed from a Twitch category. Intented to be use with newsboat.
+
+** Usage
+
+*** Credentials
+
+Place the `twitch-rss` binary on the same folder than a file called `twitch-rss.secret` that has *your* own:
+- <Client ID> on the first line
+- <Client Secret> on the second line
+
+*** Execution
+
+This will return 20 entries from the category "Software and Game Development"
+
+#+begin_src
+$ ./twitch-rss -n 20 "Software and Game Development"
+#+end_src
