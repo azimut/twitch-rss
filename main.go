@@ -81,11 +81,11 @@ func init() {
 
 func main() {
 	flag.Parse()
-	if len(os.Args) != 2 {
+	if flag.NArg() != 1 {
 		log.Fatal("missing category argument")
 		os.Exit(1)
 	}
-	categoryName = os.Args[1]
+	categoryName = flag.Args()[0]
 
 	client, err := login()
 	if err != nil {
