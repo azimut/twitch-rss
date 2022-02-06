@@ -17,15 +17,6 @@ var (
 	clientSecret string
 )
 
-func init() {
-	clientID = os.Getenv("TWITCH_ID")
-	clientSecret = os.Getenv("TWITCH_SECRET")
-	if clientID == "" || clientSecret == "" {
-		log.Fatal("needs TWITCH_ID and TWITCH_SECRET environment variables set")
-		os.Exit(1)
-	}
-}
-
 func login() (*helix.Client, error) {
 	client, err := helix.NewClient(&helix.Options{
 		ClientID:     clientID,
@@ -78,6 +69,10 @@ func toFeed(streams []helix.Stream) (string, error) {
 }
 
 func main() {
+	if err := readConfig(); err != nil {
+		log.Fatal("could not read credentials from twitch-rss.secret")
+		os.Exit(1)
+	}
 	client, err := login()
 	if err != nil {
 		log.Fatal(err)
