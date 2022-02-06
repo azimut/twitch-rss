@@ -1,4 +1,6 @@
-twitch-rss:
+SRCS=$(wildcard *.go)
+
+twitch-rss: $(SRCS)
 	~/go/bin/go build .
 
 .PHONY: clean
