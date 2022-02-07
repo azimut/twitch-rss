@@ -37,12 +37,14 @@ func loadStreams(feed *feeds.Feed, streams []helix.Stream) {
 
 func toItem(stream helix.Stream) *feeds.Item {
 	item := &feeds.Item{}
-	item.Title = stream.Title
+	item.Title = fmt.Sprintf("/%s/ %s",
+		strings.ToUpper(stream.Language), stream.Title)
 	item.Created = stream.StartedAt
 	item.Author = &feeds.Author{Name: stream.UserName}
 	item.Link = &feeds.Link{Href: "https://www.twitch.tv/" + stream.UserLogin}
-	item.Description = fmt.Sprintf("<a href='https://www.twitch.tv/popout/%s/chat?popout='>%s's Chat</a><br/>",
-		stream.UserLogin, stream.UserName)
-	item.Description += fmt.Sprintf("(%s|%d)", strings.ToUpper(stream.Language), stream.ViewerCount)
+	item.Description = fmt.Sprintf("<a href='https://www.twitch.tv/popout/%s/chat?popout='>Chat</a><br/>",
+		stream.UserLogin)
+	item.Description += fmt.Sprintf("<img alt='Thumbnail' src='%s'/>",
+		strings.Replace(stream.ThumbnailURL, "{width}x{height}", "320x240", 1))
 	return item
 }
