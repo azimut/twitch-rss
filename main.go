@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/nicklaw5/helix"
 )
@@ -14,9 +15,11 @@ var (
 	clientID     string
 	clientSecret string
 	nResults     uint
+	rawlang      string
 )
 
 func init() {
+	flag.StringVar(&rawlang, "lang", "en,es", "comma separated list of 2 digit languages to filter by")
 	flag.UintVar(&nResults, "n", 10, "number of results to return")
 	if err := readConfig(); err != nil {
 		log.Fatal("could not read credentials from twitch-rss.secret")
@@ -31,7 +34,6 @@ func main() {
 		os.Exit(1)
 	}
 	categoryName = flag.Args()[0]
-
 	client, err := login()
 	if err != nil {
 		log.Fatal(err)
@@ -45,10 +47,11 @@ func main() {
 		os.Exit(1)
 	}
 	gameID := games.Data.Games[0].ID
+	lang := strings.Split(rawlang, ",")
 	streams, err := client.GetStreams(&helix.StreamsParams{
 		First:    int(nResults),
 		Type:     "live",
-		Language: []string{"en", "es"},
+		Language: lang,
 		GameIDs:  []string{gameID},
 	})
 	if err != nil {
