@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -28,23 +29,29 @@ func init() {
 }
 
 func main() {
+	if rss, err := run(); err != nil {
+		flag.Usage()
+		log.Fatal(err)
+	} else {
+		fmt.Println(rss)
+	}
+}
+
+func run() (string, error) {
 	flag.Parse()
 	if flag.NArg() != 1 {
-		log.Fatal("missing category argument")
-		os.Exit(1)
+		return "", errors.New("missing category argument")
 	}
 	categoryName = flag.Args()[0]
 	client, err := login()
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+		return "", err
 	}
 	games, err := client.GetGames(&helix.GamesParams{
 		Names: []string{categoryName},
 	})
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+		return "", err
 	}
 	gameID := games.Data.Games[0].ID
 	lang := strings.Split(rawlang, ",")
@@ -55,13 +62,11 @@ func main() {
 		GameIDs:  []string{gameID},
 	})
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+		return "", err
 	}
 	atom, err := toFeed(streams.Data.Streams)
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+		return "", err
 	}
-	fmt.Printf("%s\n", atom)
+	return atom, nil
 }
