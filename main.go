@@ -20,7 +20,12 @@ var (
 )
 
 func init() {
-	flag.StringVar(&rawlang, "lang", "en,es", "comma separated list of 2 digit languages to filter by")
+	flag.StringVar(
+		&rawlang,
+		"lang",
+		"en,es",
+		"comma separated list of 2 digit languages to filter by",
+	)
 	flag.UintVar(&nResults, "n", 10, "number of results to return")
 	if err := readConfig(); err != nil {
 		log.Fatal("could not read credentials from twitch-rss.secret")
