@@ -51,7 +51,7 @@ func toItem(stream helix.Stream) *feeds.Item {
 		strings.Replace(stream.ThumbnailURL, "{width}x{height}", "320x240", 1),
 	)
 	item.Description += fmt.Sprintf(
-		"<a href='https://www.twitch.tv/%s/videos?filter=archives&sort=time'>%s's videos</a>",
+		"<a href='https://www.twitch.tv/%s/videos?filter=archives%%26sort%%3Dtime'>%s's videos</a>",
 		stream.UserLogin,
 		stream.UserName,
 	)
