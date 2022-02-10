@@ -8,5 +8,5 @@ clean:
 	rm -f twich-rss
 
 .PHONY: install
-install:
+install: twitch-rss
 	mv twitch-rss $(HOME)/.newsboat/feeds/
