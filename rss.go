@@ -12,10 +12,8 @@ import (
 func toFeed(streams []helix.Stream) (string, error) {
 	now := time.Now()
 	feed := &feeds.Feed{
-		Title: categoryName + " streams",
-		Link: &feeds.Link{
-			Href: "https://www.twitch.tv/directory/game/" + categoryName,
-		},
+		Title:       "Twitch's `" + categoryName + "` streams",
+		Link:        &feeds.Link{Href: "https://www.twitch.tv/directory/game/" + categoryName},
 		Description: categoryName + " streams",
 		Author:      &feeds.Author{Name: "twitch.tv"},
 		Created:     now,
@@ -45,10 +43,17 @@ func toItem(stream helix.Stream) *feeds.Item {
 	item.Author = &feeds.Author{Name: stream.UserName}
 	item.Link = &feeds.Link{Href: "https://www.twitch.tv/" + stream.UserLogin}
 	item.Description = fmt.Sprintf(
-		"<a href='https://www.twitch.tv/popout/%s/chat?popout='>Chat</a><br/>",
+		"<a href='https://www.twitch.tv/popout/%s/chat?popout='>Chat</a>",
 		stream.UserLogin,
 	)
-	item.Description += fmt.Sprintf("<img alt='Thumbnail' src='%s'/>",
-		strings.Replace(stream.ThumbnailURL, "{width}x{height}", "320x240", 1))
+	item.Description += fmt.Sprintf(
+		"<img alt='Thumbnail' src='%s'/>",
+		strings.Replace(stream.ThumbnailURL, "{width}x{height}", "320x240", 1),
+	)
+	item.Description += fmt.Sprintf(
+		"<a href='https://www.twitch.tv/%s/videos?filter=archives&sort=time'>%s's videos</a>",
+		stream.UserLogin,
+		stream.UserName,
+	)
 	return item
 }
