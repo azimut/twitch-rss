@@ -1,11 +1,10 @@
 SRCS=$(wildcard *.go)
 
 twitch-rss: $(SRCS)
-	~/go/bin/go build .
+	go build -v
 
 .PHONY: clean
-clean:
-	rm -f twich-rss
+clean: ; go clean
 
 .PHONY: install
 install: twitch-rss
