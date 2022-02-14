@@ -6,12 +6,12 @@ returns a RSS feed from a Twitch category. Intented to be use with newsboat.
 
 *** Credentials
 
-Place the `twitch-rss` binary on the same folder than a file called `twitch-rss.secret` that has *your* own:
+Place the =twitch-rss= binary on the same folder than a file called =twitch-rss.secret= that has your own:
 
 - <Client ID> on the first line
 - <Client Secret> on the second line
 
-See [[https://dev.twitch.tv/docs/authentication][Twitch API Documentation]] to obtain them
+See [[https://dev.twitch.tv/docs/authentication#registration][Twitch API Documentation]] to obtain them
 
 *** Execution
 
@@ -19,4 +19,13 @@ This will return 20 entries from the category "Software and Game Development"
 
 #+begin_src
 $ ./twitch-rss -n 20 "Software and Game Development"
+#+end_src
+
+*** Filtering
+
+I personally filter out entries on my RSS reader. On *newsboat* I added something like this to only get streams from =lisp= and =golang=:
+
+#+begin_src
+ignore-mode    "download"
+ignore-article "exec:~/.newsboat/feeds/twitch-rss -n 50 'Software and Game Development'" "title !~ \"lisp\" and title !~ \"golang\""
 #+end_src

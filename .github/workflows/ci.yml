@@ -1,5 +1,9 @@
 name: CI build
 on: [push]
+  push:
+    paths-ignore:
+      - 'LICENSE'
+      - 'README.org'
 jobs:
   build:
     runs-on: ubuntu-latest
