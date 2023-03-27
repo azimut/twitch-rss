@@ -42,18 +42,18 @@ func toItem(stream helix.Stream) *feeds.Item {
 	item.Created = stream.StartedAt
 	item.Author = &feeds.Author{Name: stream.UserName}
 	item.Link = &feeds.Link{Href: "https://www.twitch.tv/" + stream.UserLogin}
-	item.Description = fmt.Sprintf(
-		"<a href='https://www.twitch.tv/popout/%s/chat?popout='>Chat</a>",
-		stream.UserLogin,
-	)
 	item.Description += fmt.Sprintf(
-		"<img alt='Thumbnail' src='%s'/>",
-		strings.Replace(stream.ThumbnailURL, "{width}x{height}", "320x240", 1),
-	)
-	item.Description += fmt.Sprintf(
-		"<a href='https://www.twitch.tv/%s/videos?filter=archives%%26sort%%3Dtime'>%s's videos</a>",
+		"<a href='https://www.twitch.tv/%s/videos?filter=archives%%26sort%%3Dtime'>%s's videos archive</a><br/>",
 		stream.UserLogin,
 		stream.UserName,
+	)
+	item.Description += fmt.Sprintf(
+		"<img alt='thumbnail' src='%s'/><br/>",
+		strings.Replace(stream.ThumbnailURL, "{width}x{height}", "320x240", 1),
+	)
+	item.Description = fmt.Sprintf(
+		"<a href='https://www.twitch.tv/popout/%s/chat?popout='>Live Chat</a>",
+		stream.UserLogin,
 	)
 	return item
 }
