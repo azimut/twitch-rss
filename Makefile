@@ -1,7 +1,8 @@
 SRCS=$(wildcard *.go)
 
 twitch-rss: $(SRCS)
-	go build -v
+	go build -v -ldflags="-s -w"
+	ls -lh $@
 
 .PHONY: clean
 clean: ; go clean
