@@ -51,7 +51,7 @@ func toItem(stream helix.Stream) *feeds.Item {
 		"<img alt='thumbnail' src='%s'/><br/>",
 		strings.Replace(stream.ThumbnailURL, "{width}x{height}", "320x240", 1),
 	)
-	item.Description = fmt.Sprintf(
+	item.Description += fmt.Sprintf(
 		"<a href='https://www.twitch.tv/popout/%s/chat?popout='>Live Chat</a>",
 		stream.UserLogin,
 	)
